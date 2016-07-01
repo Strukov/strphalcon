@@ -200,6 +200,18 @@ class EmployeesController extends ControllerBase
         $employee->description = $this->request->getPost("description");
         $employee->root = $this->request->getPost("root");
 
+        if($id==$this->request->getPost("root")){
+            $this->flash->error('ошибка сам себе начальник');
+            $this->dispatcher->forward(array(
+                'controller' => "employees",
+                'action' => 'edit',
+                'params' => array($employee->id)
+            ));
+
+            return;
+        }
+
+
         if (!$employee->saveNode()) {
 
             foreach ($employee->getMessages() as $message) {
